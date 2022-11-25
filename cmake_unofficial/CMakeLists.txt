@@ -57,23 +57,23 @@ option(XXHASH_BUILD_XXHSUM "Build the xxhsum binary" ON)
 
 # If XXHASH is being bundled in another project, we don't want to
 # install anything.  However, we want to let people override this, so
-# we'll use the XXHASH_BUNDLED_MODE variable to let them do that; just
+# we'll use the DILIGENT_XXHASH_BUNDLED_MODE variable to let them do that; just
 # set it to OFF in your project before you add_subdirectory(xxhash/cmake_unofficial).
-if(NOT DEFINED XXHASH_BUNDLED_MODE)
+if(NOT DEFINED DILIGENT_XXHASH_BUNDLED_MODE)
   if("${PROJECT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
-    set(XXHASH_BUNDLED_MODE OFF)
+    set(DILIGENT_XXHASH_BUNDLED_MODE OFF)
   else()
-    set(XXHASH_BUNDLED_MODE ON)
+    set(DILIGENT_XXHASH_BUNDLED_MODE ON)
   endif()
 endif()
-set(XXHASH_BUNDLED_MODE ${XXHASH_BUNDLED_MODE} CACHE BOOL "" FORCE)
-mark_as_advanced(XXHASH_BUNDLED_MODE)
+set(DILIGENT_XXHASH_BUNDLED_MODE ${DILIGENT_XXHASH_BUNDLED_MODE} CACHE BOOL "" FORCE)
+mark_as_advanced(DILIGENT_XXHASH_BUNDLED_MODE)
 
 # Allow people to choose whether to build shared or static libraries
 # via the BUILD_SHARED_LIBS option unless we are in bundled mode, in
 # which case we always use static libraries.
 include(CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON "NOT XXHASH_BUNDLED_MODE" OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON "NOT DILIGENT_XXHASH_BUNDLED_MODE" OFF)
 
 # libxxhash
 add_library(xxhash "${XXHASH_DIR}/xxhash.c")
@@ -111,7 +111,7 @@ if (XXHASH_C_FLAGS)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${XXHASH_C_FLAGS}")
 endif()
 
-if(NOT XXHASH_BUNDLED_MODE)
+if(NOT DILIGENT_XXHASH_BUNDLED_MODE)
   include(GNUInstallDirs)
 
   install(TARGETS xxhash
@@ -175,6 +175,6 @@ if(NOT XXHASH_BUNDLED_MODE)
   install(FILES ${CMAKE_BINARY_DIR}/libxxhash.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
-endif(NOT XXHASH_BUNDLED_MODE)
+endif(NOT DILIGENT_XXHASH_BUNDLED_MODE)
 
 include(CPack)
